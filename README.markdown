@@ -1,10 +1,18 @@
+resque-mongo-scheduler
+======================
+
+Resque-mongo-scheduler is a port of [Resque-scheduler](https://github.com/bvandenbos/resque-scheduler)
+that depends on [Resque-mongo](https://github.com/nfo/resque-mongo) instead of [Resque](http://github.com/defunkt/resque).
+
+Requires mongo >= 1.6.
+
 resque-scheduler
 ===============
 
 Resque-scheduler is an extension to [Resque](http://github.com/defunkt/resque)
 that adds support for queueing items in the future.
 
-Requires redis >=1.3.
+<del>Requires redis >=1.3.</del>
 
 
 Job scheduling is supported in two different way:
@@ -238,8 +246,9 @@ Get get these to show up you need to pass a file to `resque-web` to tell it to
 include the `resque-scheduler` plugin.  You probably already have a file
 somewhere where you configure `resque`.  It probably looks something like this:
 
+    gem 'resque-mongo'
     require 'resque' # include resque so we can configure it
-    Resque.redis = "redis_server:6379" # tell Resque where redis lives
+    Resque.mongo = 'localhost:27017' # tell Resque where MongoDB lives
 
 Now, you want to add the following:
 

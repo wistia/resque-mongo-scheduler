@@ -1,5 +1,5 @@
 
-# Pretty much copied this file from the resque test_helper since we want
+# Pretty much copied this file from the resque-mongo test_helper since we want
 # to do all the same stuff
 
 dir = File.dirname(File.expand_path(__FILE__))
@@ -7,6 +7,7 @@ dir = File.dirname(File.expand_path(__FILE__))
 require 'rubygems'
 require 'test/unit'
 require 'mocha'
+gem 'resque-mongo'
 require 'resque'
 require File.join(dir, '../lib/resque_scheduler')
 $LOAD_PATH.unshift File.dirname(File.expand_path(__FILE__)) + '/../lib'
@@ -16,11 +17,11 @@ $LOAD_PATH.unshift File.dirname(File.expand_path(__FILE__)) + '/../lib'
 # make sure we can run redis
 #
 
-if !system("which redis-server")
-  puts '', "** can't find `redis-server` in your path"
-  puts "** try running `sudo rake install`"
-  abort ''
-end
+# if !system("which redis-server")
+#   puts '', "** can't find `redis-server` in your path"
+#   puts "** try running `sudo rake install`"
+#   abort ''
+# end
 
 
 #
@@ -28,25 +29,38 @@ end
 # kill it when they end
 #
 
-at_exit do
-  next if $!
+# at_exit do
+#   next if $!
+# 
+#   if defined?(MiniTest)
+#     exit_code = MiniTest::Unit.new.run(ARGV)
+#   else
+#     exit_code = Test::Unit::AutoRunner.run
+#   end
+# 
+#   pid = `ps -e -o pid,command | grep [r]edis-test`.split(" ")[0]
+#   puts "Killing test redis server..."
+#   `rm -f #{dir}/dump.rdb`
+#   Process.kill("KILL", pid.to_i)
+#   exit exit_code
+# end
 
-  if defined?(MiniTest)
-    exit_code = MiniTest::Unit.new.run(ARGV)
-  else
-    exit_code = Test::Unit::AutoRunner.run
+Resque.mongo = 'localhost:27017'
+
+module Resque
+  # Drop all collections in the 'monque' database.
+  # Note: do not drop the database directly, as mongod allocates disk space
+  # each time it's re-created.
+  def flushall
+    for name in @db.collection_names
+      begin
+        @db.drop_collection(name)
+      rescue Mongo::OperationFailure
+        # "can't drop system ns"
+      end
+    end
   end
-
-  pid = `ps -e -o pid,command | grep [r]edis-test`.split(" ")[0]
-  puts "Killing test redis server..."
-  `rm -f #{dir}/dump.rdb`
-  Process.kill("KILL", pid.to_i)
-  exit exit_code
 end
-
-puts "Starting redis for testing at localhost:9736..."
-`redis-server #{dir}/redis-test.conf`
-Resque.redis = 'localhost:9736'
 
 ##
 # test/spec/mini 3

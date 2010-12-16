@@ -25,7 +25,7 @@ module Resque
 
       # Schedule all jobs and continually look for delayed jobs (never returns)
       def run
-        $0 = "resque-scheduler: Starting"
+        $0 = "resque-mongo-scheduler: Starting"
         # trap signals
         register_signal_handlers
 
@@ -69,7 +69,7 @@ module Resque
         Resque.schedule.each do |name, config|
           load_schedule_job(name, config)
         end
-        Resque.redis.del(:schedules_changed)
+        Resque.schedules_changed.remove
         procline "Schedules Loaded"
       end
       
@@ -185,10 +185,10 @@ module Resque
       end
       
       def update_schedule
-        if Resque.redis.scard(:schedules_changed) > 0
+        if Resque.schedules_changed.count > 0
           procline "Updating schedule"
           Resque.reload_schedule!
-          while schedule_name = Resque.redis.spop(:schedules_changed)
+          Resque.pop_schedules_changed do |schedule_name|
             if Resque.schedule.keys.include?(schedule_name)
               unschedule_job(schedule_name)
               load_schedule_job(schedule_name, Resque.schedule[schedule_name])
@@ -232,7 +232,7 @@ module Resque
       end
       
       def procline(string)
-        $0 = "resque-scheduler-#{ResqueScheduler::Version}: #{string}"
+        $0 = "resque-mongo-scheduler-#{ResqueScheduler::Version}: #{string}"
         log! $0
       end
 

@@ -2,14 +2,14 @@
 require File.expand_path("../lib/resque_scheduler/version", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = "resque-scheduler"
+  s.name        = "resque-mongo-scheduler"
   s.version     = ResqueScheduler::Version
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ['Ben VandenBos']
-  s.email       = ['bvandenbos@gmail.com']
-  s.homepage    = "http://github.com/bvandenbos/resque-scheduler"
-  s.summary     = "Light weight job scheduling on top of Resque"
-  s.description = %q{Light weight job scheduling on top of Resque.
+  s.authors     = ['Ben VandenBos', 'Nicolas Fouché']
+  s.email       = ['bvandenbos@gmail.com', 'nicolas@silentale.com']
+  s.homepage    = "http://github.com/nfo/resque-mongo-scheduler"
+  s.summary     = "Light weight job scheduling on top of Resque Mongo"
+  s.description = %q{Light weight job scheduling on top of Resque Mongo.
     Adds methods enqueue_at/enqueue_in to schedule jobs in the future.
     Also supports queueing jobs on a fixed, cron-like schedule.}
   
@@ -20,8 +20,8 @@ Gem::Specification.new do |s|
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact
   s.require_path = 'lib'
   
-  s.add_runtime_dependency(%q<redis>, [">= 2.0.1"])
-  s.add_runtime_dependency(%q<resque>, [">= 1.8.0"])
+  s.add_runtime_dependency(%q<mongo>, [">= 1.1"])
+  s.add_runtime_dependency(%q<resque-mongo>, [">= 1.11.0"])
   s.add_runtime_dependency(%q<rufus-scheduler>, [">= 0"])
   s.add_development_dependency(%q<mocha>, [">= 0"])
   s.add_development_dependency(%q<rack-test>, [">= 0"])
