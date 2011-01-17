@@ -143,7 +143,7 @@ module ResqueScheduler
 
   # Returns an array of timestamps based on start and count
   def delayed_queue_peek(start, count)
-    delayed_queue.find({}, :skip => start, :limit => count, :fields => '_id').map {|d| d['_id']}
+    delayed_queue.find({}, :skip => start, :limit => count, :fields => '_id', :sort => ['_id', 1]).map {|d| d['_id']}
   end
 
   # Returns the size of the delayed queue schedule
