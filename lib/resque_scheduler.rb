@@ -5,6 +5,7 @@ require 'resque/server'
 require 'resque_scheduler/version'
 require 'resque/scheduler'
 require 'resque_scheduler/server'
+require 'resque_scheduler/search_delayed'
 
 module ResqueScheduler
 
