@@ -135,7 +135,8 @@ module Resque
                 # custom job classes not supporting the same API calls must implement the #schedule method
                 constantize(job_klass).scheduled(queue, item['class'], *item['args'])
               else
-                Resque::Job.create(queue, item['class'], *item['args'])
+                klass, args = item['class'], item['args']
+                Resque.enqueue(constantize(klass), *args)
               end
             end
           end
@@ -160,7 +161,7 @@ module Resque
           # custom job classes not supporting the same API calls must implement the #schedule method
           constantize(job_klass).scheduled(queue, klass_name, *params)
         else
-          Resque::Job.create(queue, klass_name, *params)
+          Resque.enqueue(constantize(klass_name), *params)
         end        
       end
 
