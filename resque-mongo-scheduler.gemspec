@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   
   s.add_runtime_dependency(%q<mongo>, [">= 1.1"])
-  s.add_runtime_dependency(%q<resque-mongo>, [">= 1.11.0"])
+  s.add_runtime_dependency(%q<resque-mongo>, [">= 1.9.8.1"])
   s.add_runtime_dependency(%q<rufus-scheduler>, [">= 0"])
   s.add_development_dependency(%q<mocha>, [">= 0"])
   s.add_development_dependency(%q<rack-test>, [">= 0"])
