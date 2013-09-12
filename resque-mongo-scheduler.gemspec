@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name        = "resque-mongo-scheduler"
   s.version     = ResqueScheduler::Version
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ['Ben VandenBos', 'Nicolas Fouché']
+  s.authors     = ['Ben VandenBos', 'Nicolas Fouche']
   s.email       = ['bvandenbos@gmail.com', 'nicolas@silentale.com']
   s.homepage    = "http://github.com/nfo/resque-mongo-scheduler"
   s.summary     = "Light weight job scheduling on top of Resque Mongo"
